@@ -1,0 +1,541 @@
+<title>K-campus 소셜 시그널</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --paper: #f6f3ec;
+    --surface: #fffdf9;
+    --surface-2: #eee9dd;
+    --ink: #1b1b18;
+    --ink-secondary: #5b584e;
+    --muted: #8a8577;
+    --accent: #c1552f;
+    --accent-ink: #ffffff;
+    --accent-soft: #ecdcce;
+    --navy: #2b3a55;
+    --navy-soft: #e2e5ec;
+    --hairline: rgba(27,27,24,0.13);
+    --good: #0ca30c;
+    --critical: #c23b3b;
+    --chart-surface: #fcfcfb;
+    --chart-grid: #e1e0d9;
+    --chart-axis: #c3c2b7;
+    --chart-muted: #898781;
+    --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --paper: #16181c;
+      --surface: #1d2024;
+      --surface-2: #262a30;
+      --ink: #f0eee7;
+      --ink-secondary: #bfbcb2;
+      --muted: #8f8c82;
+      --accent: #e2825c;
+      --accent-ink: #1b1108;
+      --accent-soft: #3a2a20;
+      --navy: #a9b7d6;
+      --navy-soft: #262c39;
+      --hairline: rgba(240,238,231,0.14);
+      --good: #35c235;
+      --critical: #e57373;
+      --chart-surface: #1a1a19;
+      --chart-grid: #2c2c2a;
+      --chart-axis: #4a4a46;
+      --chart-muted: #928f83;
+      --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --paper: #16181c;
+    --surface: #1d2024;
+    --surface-2: #262a30;
+    --ink: #f0eee7;
+    --ink-secondary: #bfbcb2;
+    --muted: #8f8c82;
+    --accent: #e2825c;
+    --accent-ink: #1b1108;
+    --accent-soft: #3a2a20;
+    --navy: #a9b7d6;
+    --navy-soft: #262c39;
+    --hairline: rgba(240,238,231,0.14);
+    --good: #35c235;
+    --critical: #e57373;
+    --chart-surface: #1a1a19;
+    --chart-grid: #2c2c2a;
+    --chart-axis: #4a4a46;
+    --chart-muted: #928f83;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  }
+
+  *{box-sizing:border-box;}
+  body{background:var(--paper);}
+  .page{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Public Sans",-apple-system,"Segoe UI",sans-serif;
+    line-height:1.6;
+    padding:56px 20px 80px;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  .wide{max-width:900px;margin:0 auto;}
+  h1,h2,h3{font-family:"Public Sans",-apple-system,"Segoe UI",sans-serif;text-wrap:balance;color:var(--ink);margin:0;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin:0 0 10px;
+  }
+  h1{font-size:clamp(28px,4vw,40px);font-weight:600;line-height:1.15;}
+  h2{font-size:24px;font-weight:600;}
+  h3{font-size:17px;font-weight:600;font-family:"Public Sans",sans-serif;}
+  p{margin:0;color:var(--ink-secondary);max-width:none;}
+  .lede{color:var(--ink);font-size:16px;max-width:none;}
+  a{color:var(--navy);}
+
+  /* header */
+  header.report-head{
+    display:flex;flex-direction:column;gap:18px;
+    padding-bottom:28px;margin-bottom:36px;
+    border-bottom:1px solid var(--hairline);
+  }
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:8px 22px;
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:12.5px;color:var(--muted);
+  }
+  .meta-row b{color:var(--ink-secondary);font-weight:600;}
+
+  /* stat tiles */
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--hairline);
+    border:1px solid var(--hairline);
+    margin:32px 0 40px;
+    border-radius:10px;overflow:hidden;
+  }
+  .stat{background:var(--surface);padding:18px 16px;display:flex;flex-direction:column;gap:6px;}
+  .stat .k{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  .stat .v{font-family:"Fraunces",serif;font-size:22px;font-weight:600;color:var(--ink);line-height:1.2;}
+  .stat .d{font-size:12.5px;color:var(--ink-secondary);}
+  @media(max-width:720px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* callout */
+  .callout{
+    background:var(--surface-2);border-radius:10px;padding:18px 20px;
+    margin:0 0 40px;display:flex;gap:14px;border:1px solid var(--hairline);
+  }
+  .callout .mk{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;flex:none;font-size:13px;padding-top:2px;}
+  .callout ul{margin:8px 0 0;padding-left:18px;color:var(--ink-secondary);}
+  .callout li{margin:4px 0;font-size:14px;}
+  .callout p{font-size:14px;color:var(--ink-secondary);}
+
+  /* stage sections */
+  .stage{margin:64px 0;}
+  .stage-head{display:flex;align-items:baseline;gap:16px;margin-bottom:6px;}
+  .stage-num{
+    font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--accent);
+    border:1px solid var(--accent);border-radius:20px;padding:3px 11px;
+    letter-spacing:.04em;flex:none;
+  }
+  .stage-sub{font-size:14px;color:var(--muted);margin:10px 0 26px;font-family:"IBM Plex Mono",monospace;}
+  .takeaway{
+    margin-top:22px;padding:16px 18px;border-left:3px solid var(--accent);
+    background:var(--surface-2);border-radius:0 8px 8px 0;
+  }
+  .takeaway .lbl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:600;display:block;margin-bottom:6px;}
+  .takeaway p{color:var(--ink);font-size:14.5px;max-width:none;}
+
+  /* charts */
+  .chart-card{background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:20px 20px 12px;margin:18px 0;}
+  .chart-title{font-size:13.5px;color:var(--ink-secondary);margin-bottom:2px;font-weight:600;}
+  .chart-scroll{overflow-x:auto;}
+  .chart-svg{width:100%;min-width:560px;height:auto;display:block;}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:10px;padding-top:12px;border-top:1px solid var(--hairline);}
+  .legend-item{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-secondary);font-family:"IBM Plex Mono",monospace;}
+  .legend-swatch{width:10px;height:10px;border-radius:3px;flex:none;}
+  .tooltip{
+    position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;padding:8px 10px;border-radius:7px;
+    opacity:0;transition:opacity .1s;white-space:nowrap;z-index:5;line-height:1.5;
+  }
+  .chart-wrap{position:relative;}
+  details.tbl-toggle{margin-top:10px;}
+  details.tbl-toggle summary{cursor:pointer;font-size:12.5px;color:var(--navy);font-family:"IBM Plex Mono",monospace;}
+
+  /* tables */
+  .tbl-scroll{overflow-x:auto;margin:18px 0;border:1px solid var(--hairline);border-radius:10px;}
+  table{width:100%;border-collapse:collapse;background:var(--surface);font-size:13.5px;min-width:560px;}
+  thead th{
+    text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);background:var(--surface-2);padding:10px 14px;border-bottom:1px solid var(--hairline);font-weight:600;
+  }
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--hairline);color:var(--ink-secondary);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.num, th.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--ink);}
+  td.name{color:var(--ink);font-weight:600;}
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink);}
+  .dot{width:7px;height:7px;border-radius:50%;flex:none;}
+  .dot.good{background:var(--good);} .dot.critical{background:var(--critical);} .dot.warn{background:var(--accent);}
+
+  /* creator cards */
+  .creator-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0;}
+  .creator{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;}
+  .creator .handle{font-weight:600;font-size:13.5px;color:var(--ink);}
+  .creator .niche{font-size:12px;color:var(--muted);min-height:32px;}
+  .creator .figs{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-secondary);padding-top:8px;border-top:1px solid var(--hairline);}
+  .creator .mult{font-family:"IBM Plex Mono",monospace;font-size:19px;color:var(--accent);font-weight:600;}
+  @media(max-width:760px){.creator-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* format lists */
+  .fmt-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0;}
+  .fmt-col{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:18px;}
+  .fmt-col h4{font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin:0 0 4px;color:var(--ink);}
+  .fmt-col .plat-sub{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-bottom:12px;display:block;}
+  .fmt-col ul{margin:0;padding-left:18px;}
+  .fmt-col li{font-size:13.5px;color:var(--ink-secondary);margin:7px 0;}
+  .fmt-col li b{color:var(--ink);}
+  @media(max-width:720px){.fmt-compare{grid-template-columns:1fr;}}
+
+  /* recs */
+  .recs{counter-reset:rec;list-style:none;margin:20px 0;padding:0;display:flex;flex-direction:column;gap:2px;}
+  .recs li{
+    counter-increment:rec;display:grid;grid-template-columns:34px 1fr;gap:14px;
+    padding:14px 4px;border-bottom:1px solid var(--hairline);
+  }
+  .recs li:last-child{border-bottom:none;}
+  .recs li::before{
+    content:counter(rec,decimal-leading-zero);font-family:"IBM Plex Mono",monospace;
+    color:var(--accent);font-size:13px;font-weight:600;padding-top:2px;
+  }
+  .recs b{color:var(--ink);}
+  .recs span{color:var(--ink-secondary);font-size:14px;}
+
+  footer{margin-top:70px;padding-top:20px;border-top:1px solid var(--hairline);
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;}
+
+  @media (max-width:720px){
+    .creator-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+
+<div class="page">
+  <div class="wrap">
+
+    <header class="report-head">
+      <div class="eyebrow">소셜 트렌드 조사</div>
+      <h1>K-campus 브랜드·경쟁사 소셜 언급량 트렌드</h1>
+      <p class="lede">브랜드 키워드 → 국내 경쟁 5개 브랜드 → 글로벌 커뮤니티 채널 순으로 3단계에 걸쳐 조사한 트렌드 정리 (툴: 구글 트렌드)</p>
+      <div class="meta-row">
+        <span><b>조사기간</b> 2025-09 – 2026-09 (최근 12개월)</span>
+        <span><b>작성일</b> 2026-09-10</span>
+        <span><b>범위</b> 브랜드 키워드 · 국내경쟁 5개 · 글로벌 커뮤니티 4개 채널</span>
+      </div>
+    </header>
+
+    <div class="callout">
+      <span class="mk">i</span>
+      <div>
+        <p><b style="color:var(--ink)">방법:</b> Google Trends(상대 검색관심도), Reddit/Facebook/Instagram/TikTok 공개 데이터, 웹서치 트렌드 조합.<br>*절대 언급 건수를 세는 유료 소셜리스닝 툴(Brandwatch·썸트렌드 등)은 사용하지 않음.</p>
+        <ul>
+          <li>모든 트렌드 수치는 <b style="color:var(--ink-secondary)">절대량이 아닌 상대 지수(0–100)</b>입니다.</li>
+          <li>Instagram/TikTok 해시태그 조회수는 <b style="color:var(--ink-secondary)">로그인 없이 열람 가능한 범위</b>까지만 수집했습니다.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STAGE 01 -->
+    <section class="stage">
+      <div class="stage-head">
+        <span class="stage-num">01</span>
+        <h2>브랜드 키워드 — K-campus</h2>
+      </div>
+      <p class="stage-sub">Google Trends · 전세계 · 지난 12개월 · 주간</p>
+      <p>"K-campus"·"케이캠퍼스" 두 키워드 모두 연중 대부분 0에 머물다가, 특정 시점에만 스파이크가 발생하는 극단적인 스파이크형 패턴을 보임. 국내(KR) 단독 검색량은 임계치 미달로 데이터 자체가 잡히지 않을 정도로 니치함.</p>
+
+      <div class="chart-card">
+        <div class="chart-title">K-campus / 케이캠퍼스 — 상대 검색 관심도 (0–100)</div>
+        <div class="chart-scroll">
+          <div class="chart-wrap">
+            <svg id="chart1" class="chart-svg" viewBox="0 0 880 300" preserveAspectRatio="xMinYMin meet"></svg>
+            <div class="tooltip" id="tip1"></div>
+          </div>
+        </div>
+        <div class="legend" id="legend1"></div>
+        <details class="tbl-toggle">
+          <summary>스파이크 표로 보기</summary>
+          <div class="tbl-scroll" style="margin-top:10px;border:none;">
+            <table>
+              <thead><tr><th>시점</th><th>키워드</th><th class="num">관심도</th></tr></thead>
+              <tbody>
+                <tr><td class="num">2025-12-07</td><td class="name">K-campus</td><td class="num">90</td></tr>
+                <tr><td class="num">2026-06-21</td><td class="name">케이캠퍼스</td><td class="num">100</td></tr>
+                <tr><td class="num">2026-08-23 ~ 09-06</td><td class="name">케이캠퍼스</td><td class="num">8 → 19 → 21</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <div class="takeaway">
+        <span class="lbl">인사이트</span>
+        <p>브랜드 검색은 연중 대부분 0에 머물다 특정 시점에만 몰려서 발생함. 스파이크 시점을 특정 원인 하나로 단정할 근거는 부족하고, <b>상시적인 브랜드 버즈가 부재하다는 것 자체가 더 확실한 시사점</b>임.</p>
+      </div>
+    </section>
+
+    <!-- STAGE 02 -->
+    <section class="stage">
+      <div class="stage-head">
+        <span class="stage-num">02</span>
+        <h2>국내 경쟁 브랜드</h2>
+      </div>
+      <p class="stage-sub">Hi-Korea · Study in Korea · 컴퍼스(Compass) · Kowork · Buddies Korea</p>
+      <p>정보·커뮤니티 계열(Hi-Korea, Study in Korea, 컴퍼스)과 취업 버티컬(Kowork, Buddies Korea) 모두에서 신호가 확인됨. 취업 쪽은 <b style="color:var(--ink)">Kowork가 가장 강하고 지속적인 검색 모멘텀</b>을 보이고, 정보 쪽은 <b style="color:var(--ink)">studyinkorea가 연중 꾸준한 기본 수요</b>를 확보.</p>
+
+      <div class="chart-card">
+        <div class="chart-title">국내 경쟁 브랜드 비교 — 상대 검색 관심도 (0–100, 전세계)</div>
+        <div class="chart-scroll">
+          <div class="chart-wrap">
+            <svg id="chart2" class="chart-svg" viewBox="0 0 880 300" preserveAspectRatio="xMinYMin meet"></svg>
+            <div class="tooltip" id="tip2"></div>
+          </div>
+        </div>
+        <div class="legend" id="legend2"></div>
+      </div>
+
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>브랜드</th><th>검색어 기준</th><th class="num">평균</th><th class="num">피크</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td class="name">K-campus</td><td>영문 · 전세계</td><td class="num">1</td><td class="num">46 (25-12-07)</td><td>국내(KR) 단독으론 데이터 자체가 안 잡힐 정도로 니치</td></tr>
+            <tr><td class="name">하이코리아</td><td>국문 · KR</td><td class="num">34</td><td class="num">90 (26-01-11)</td><td>⚠ 법무부 출입국 공식 포털과 검색어 구분 불가</td></tr>
+            <tr><td class="name">코워크</td><td>국문 · KR</td><td class="num">18</td><td class="num">100 (26-02-08)</td><td>2월 채용시즌 스파이크</td></tr>
+            <tr><td class="name">Kowork</td><td>영문 · 전세계</td><td class="num">62</td><td class="num">100 (26-08-02)</td><td>국문 대비 3배 이상 크고 꾸준함 — 실질 수요 상당수가 영문 검색에서 발생</td></tr>
+            <tr><td class="name">Buddies Korea</td><td>영문 · 전세계</td><td class="num">22</td><td class="num">92 (26-02-08)</td><td>국문 "버디즈코리아"는 무검색 — 수요가 전량 영문에 집중</td></tr>
+            <tr><td class="name">studyinkorea</td><td>영문 · 전세계</td><td class="num">38</td><td class="num">100 (25-09-28)</td><td>정부 공식 포털. GKS 장학금 공지 시즌마다 스파이크</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;margin-top:8px;">컴퍼스는 소규모 초기 스타트업으로 확인되어 유의미한 검색 볼륨이 없어 표에서 제외.</p>
+
+      <div class="takeaway">
+        <span class="lbl">인사이트</span>
+        <p>K-campus 자체 커리어 페이지는 오가닉 서치 기준 존재감이 거의 없는 반면, <b>코워크는 오가닉/광고 서치 내에서 뚜렷한 성장세를 보이는 카테고리 리더</b>임. Kowork·Buddies Korea 모두 국문 검색보다 영문 검색에서 훨씬 큰 신호가 나와, 광고나 키워드 세팅은 영문 위주로 만들어둔 것으로 예상. 포탈 쪽에서는 <b>studyinkorea가 연중 꾸준한 검색 수요</b>를 유지하고 있고, GKS 공지 시즌에는 스파이크가 더 뚜렷. K-campus는 아직 이 둘에 비해 오가닉/광고 모두 더 개선할 부분이 있어 보임.</p>
+      </div>
+    </section>
+
+    <!-- STAGE 03 -->
+    <section class="stage">
+      <div class="stage-head">
+        <span class="stage-num">03</span>
+        <h2>글로벌 커뮤니티 채널</h2>
+      </div>
+      <p class="stage-sub">Reddit · Facebook 그룹 · Instagram · TikTok</p>
+
+      <h3 style="margin:28px 0 4px;">Reddit : 주요 타겟이 겹칠 수 있는 대학별 서브레딧과 한국 생활 및 GKS에 대한 일부 서브레딧에 대해 데이터 체크</h3>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>서브레딧</th><th class="num">주간 방문자</th><th class="num">주간 기여</th><th class="num">기여율</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td class="name">r/Living_in_Korea</td><td class="num">150,000</td><td class="num">3,000</td><td class="num">2.0%</td><td><span class="status"><span class="dot good"></span>압도적 최대 규모</span> · 뉴스/생활 이슈 중심, 2020년 개설</td></tr>
+            <tr><td class="name">r/GKSScholarship</td><td class="num">2,800</td><td class="num">478</td><td class="num">17.1%</td><td><span class="status"><span class="dot good"></span>소규모지만 기여율 최고</span> · GKS-U/G 지원자·현직 장학생·동문, 2022년 개설</td></tr>
+            <tr><td class="name">r/yonsei</td><td class="num">1,800</td><td class="num">90</td><td class="num">5.0%</td><td><span class="status"><span class="dot good"></span>활발</span> · 2013년 개설</td></tr>
+            <tr><td class="name">r/KAIST</td><td class="num">1,500</td><td class="num">136</td><td class="num">9.1%</td><td><span class="status"><span class="dot good"></span>활발</span> · 2011년 개설</td></tr>
+            <tr><td class="name">r/koreauniversity</td><td class="num">1,200</td><td class="num">44</td><td class="num">3.7%</td><td><span class="status"><span class="dot good"></span>활발</span> · 2012년 개설</td></tr>
+            <tr><td class="name">r/StudyinKorea</td><td class="num">127</td><td class="num">9</td><td class="num">7.1%</td><td><span class="status"><span class="dot critical"></span>규모 자체가 작음</span> · 2021년 개설, "K-campus와 이름이 가장 겹치는" 서브인데도 최소 규모</td></tr>
+            <tr><td class="name">r/SNU</td><td class="num">109*</td><td class="num">–</td><td class="num">–</td><td>⚠ 이 서브만 사이드바에 단일 지표("Cranes")만 노출 — 방문자/기여로 안 갈라져 있어 다른 행과 직접 비교 불가</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;margin-top:8px;">기여율(주간 기여 ÷ 주간 방문자): <b style="color:var(--ink-secondary)">GKS 서브레딧은 규모는 작아도 방문자 6명 중 1명꼴로 직접 글을 남길 만큼 고관여</b>인 반면, <b style="color:var(--ink-secondary)">한국 생활 서브레딧은 규모는 압도적이지만 기여율 2%로 "읽기만 하는" 대형 뉴스피드 같은 느낌</b>(물론 둘 다 유의미함). 대학별 서브레딧(Yonsei·KAIST·Korea University)는 1,200~1,800명 규모에서 고르게 활발함 — 일부 대학은 신규 유학생 채팅이나 OT 공지 등을 아예 서브레딧을 통해서 하기도 함.</p>
+      <h3 style="margin:32px 0 4px;">Facebook 그룹 — 실제 오디언스는 있으나 유입 정체</h3>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>그룹</th><th class="num">멤버</th><th>공개여부</th><th>최근 활동</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Foreigners in Korea</td><td class="num">3,600</td><td>공개</td><td>3시간 전 게시물 — 활발</td></tr>
+            <tr><td class="name">International Students in Korea</td><td class="num">18,894</td><td>비공개(2015 개설)</td><td>월 24개 게시물 / 지난주 신규멤버 0명 — 성장 정체</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin:32px 0 4px;">Instagram — 정보형 콘텐트가 팔로워 규모와 무관하게 확산되어 있는 채널</h3>
+      <p>해시태그 기준 #Kcampus 10.2만 뷰. 상위 게시물의 경우 팔로워가 2천명대인 계정도 40만 뷰를 찍는 등, <b style="color:var(--ink)">"정보형 리스티클" 포맷 자체가 팔로워 규모와 무관하게 알고리즘 확산</b>되는 패턴.</p>
+
+      <h3 style="margin:36px 0 12px;">Instagram vs TikTok — 같은 주제, 다른 포맷</h3>
+      <div class="fmt-compare">
+        <div class="fmt-col">
+          <h4>Instagram</h4>
+          <span class="plat-sub">정보 밀도 · 소수 바이럴 집중형</span>
+          <ul>
+            <li><b>정보형 리스티클</b> — "몰랐던 장학금 3가지", "대학 랭킹 Top 5"</li>
+            <li><b>미신 깨기형</b> — "한국은 드라마와 다르다" 류 기대치 조정 콘텐트</li>
+            <li><b>단계 가이드형</b> — "지원 7단계" 같은 절차 정리</li>
+            <li><b>브랜드 UGC</b> — #kcampus_ambassador, #MyKoreaMoment 캠페인 태그</li>
+          </ul>
+        </div>
+        <div class="fmt-col">
+          <h4>TikTok</h4>
+          <span class="plat-sub">일상 브이로그 · 롱테일 분산형</span>
+          <ul>
+            <li><b>Day in my life / Uni vlog</b>가 압도적 다수, 정보형은 소수</li>
+            <li><b>대학명 파편화</b> — 거의 모든 게시물에 자기 학교 해시태그(#yonseiuniversity #sejong #gachon 등)</li>
+            <li>GKS도 리스트가 아닌 <b>브이로그 서사</b>(합격 후기, 오리엔테이션)로 소비됨</li>
+            <li>국적·언어 매우 다양(네팔·인니·베트남·러시아·미얀마 등) — 소수 계정 바이럴이 아닌 <b>다수 계정 분산형</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="stat-grid" style="grid-template-columns:1fr 1fr;margin-top:8px;">
+        <div class="stat">
+          <span class="k">Instagram 오운드</span>
+          <span class="v">3.6만 팔로워</span>
+          <span class="d">@kcampus.official</span>
+        </div>
+        <div class="stat">
+          <span class="k">TikTok 오운드</span>
+          <span class="v">1,658 팔로워</span>
+          <span class="d">@kcampus.official · 누적 좋아요 2.01만 — 카테고리 활발함 대비 초기 단계</span>
+        </div>
+      </div>
+
+      <div class="takeaway">
+        <span class="lbl">인사이트</span>
+        <p>Reddit·Instagram·TikTok 모두에서 반복되는 패턴: <b>진짜 대화는 개인 크리에이터/개별 커뮤니티가 쥐고 있고, K-campus의 오운드 존재감은 그 일부</b>에 그침. Reddit에서는 <b>r/Living_in_Korea(주간 방문자 15만)·r/GKSScholarship(기여율 17%)</b>이 가장 트래픽·관여도가 높은 커뮤니티로 확인됨. Instagram은 정보형 포맷 확산, TikTok은 UGC 파트너십, Reddit은 위 두 커뮤니티에서의 존재감 확보를 채널별 방향으로 검토할 만함.</p>
+      </div>
+    </section>
+
+    <!-- STRATEGIC -->
+    <section class="stage" style="margin-top:56px;">
+      <div class="stage-head">
+        <h2>종합 제언</h2>
+      </div>
+      <ol class="recs">
+        <li><b>버티컬별 검색 노출 강화 필요.</b><br><span>Kowork처럼 카테고리 리더가 뚜렷한 영역들이 확인된 만큼, 버티컬별 검색 노출을 강화할 필요가 있음. 다만 어떤 영역·카테고리에 특화할지는 내부적으로 별도 논의가 필요.</span></li>
+        <li><b>Instagram 해외 프레젠스 확대 고민 필요.</b><br><span>정보형 콘텐트가 팔로워 규모와 무관하게 확산되는 채널인 만큼, 브랜드가 더 활동할 여지가 있는 채널임. 국내뿐 아니라 해외에서 프레젠스를 어떻게 높일지 고민이 필요한 시기.</span></li>
+        <li><b>Reddit 채널 전략 수립 필요.</b><br><span>해외 실사용 비중이 큰 만큼 활용 가치가 높은 채널. 어떤 서브레딧에 어떤 소재(캠페인/광고/콘텐트)로 접근 가능할지 전략 수립 필요.</span></li>
+      </ol>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var dates = ["2025-09-07","2025-09-14","2025-09-21","2025-09-28","2025-10-05","2025-10-12","2025-10-19","2025-10-26",
+  "2025-11-02","2025-11-09","2025-11-16","2025-11-23","2025-11-30","2025-12-07","2025-12-14","2025-12-21","2025-12-28",
+  "2026-01-04","2026-01-11","2026-01-18","2026-01-25","2026-02-01","2026-02-08","2026-02-15","2026-02-22",
+  "2026-03-01","2026-03-08","2026-03-15","2026-03-22","2026-03-29","2026-04-05","2026-04-12","2026-04-19","2026-04-26",
+  "2026-05-03","2026-05-10","2026-05-17","2026-05-24","2026-05-31","2026-06-07","2026-06-14","2026-06-21","2026-06-28",
+  "2026-07-05","2026-07-12","2026-07-19","2026-07-26","2026-08-02","2026-08-09","2026-08-16","2026-08-23","2026-08-30","2026-09-06"];
+
+  function z(n){var a=new Array(n);for(var i=0;i<n;i++)a[i]=0;return a;}
+
+  // chart1: K-campus / 케이캠퍼스 (global)
+  var kcEN = z(53); kcEN[13]=90; kcEN[51]=8;
+  var kcKR = z(53); kcKR[41]=100; kcKR[50]=8; kcKR[51]=19; kcKR[52]=21;
+
+  // chart2: job vertical (global)
+  var kc2 = z(53); kc2[13]=46; kc2[51]=4;
+  var hikorea = z(53);
+  var kowork = [94,82,0,50,44,0,69,0,56,0,57,79,49,53,72,67,0,56,83,61,54,70,54,47,70,63,82,80,69,65,59,51,54,59,61,53,50,67,84,61,87,95,86,87,87,62,71,100,76,77,85,77,92];
+  var buddies = [0,0,0,0,0,0,50,0,60,67,46,47,42,44,55,0,0,0,0,74,0,43,92,52,51,46,0,0,42,44,0,46,0,0,0,0,0,0,58,0,42,58,52,38,0,0,0,0,0,0,7,13,6];
+  var studyinkorea = [88,77,73,100,36,31,0,43,31,0,41,0,28,36,29,0,0,30,0,37,34,56,54,62,63,33,36,36,46,35,31,41,40,38,44,42,31,47,73,60,42,43,27,35,49,0,25,36,24,24,10,38,57];
+
+  function fmtDate(d){var p=d.split("-");return p[1]+"/"+p[2];}
+
+  function renderChart(svgId, tipId, legendId, seriesDefs){
+    var svg = document.getElementById(svgId);
+    var tip = document.getElementById(tipId);
+    var legendEl = document.getElementById(legendId);
+    var W=880,H=300,padL=40,padR=14,padT=16,padB=30;
+    var n = dates.length;
+    var plotW = W-padL-padR, plotH = H-padT-padB;
+    var x = function(i){return padL + i*(plotW/(n-1));};
+    var y = function(v){return padT + plotH - (v/100)*plotH;};
+    var svgNS = "http://www.w3.org/2000/svg";
+    function el(tag,attrs){
+      var e = document.createElementNS(svgNS,tag);
+      for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+      return e;
+    }
+    // grid
+    [0,25,50,75,100].forEach(function(v){
+      svg.appendChild(el("line",{x1:padL,x2:W-padR,y1:y(v),y2:y(v),stroke:"var(--chart-grid)","stroke-width":1}));
+      var t = el("text",{x:padL-8,y:y(v)+3,"text-anchor":"end","font-size":10,"font-family":"IBM Plex Mono, monospace",fill:"var(--chart-muted)"});
+      t.textContent = v; svg.appendChild(t);
+    });
+    // x ticks
+    var tickIdx = [0,9,17,26,35,43,52];
+    tickIdx.forEach(function(i){
+      var t = el("text",{x:x(i),y:H-8,"text-anchor":"middle","font-size":10,"font-family":"IBM Plex Mono, monospace",fill:"var(--chart-muted)"});
+      var d = dates[i].split("-"); t.textContent = d[0].slice(2)+"."+d[1];
+      svg.appendChild(t);
+    });
+    svg.appendChild(el("line",{x1:padL,x2:W-padR,y1:y(0),y2:y(0),stroke:"var(--chart-axis)","stroke-width":1}));
+
+    seriesDefs.forEach(function(s){
+      var pts = s.data.map(function(v,i){return x(i)+","+y(v);}).join(" ");
+      svg.appendChild(el("polyline",{points:pts, fill:"none", stroke:s.color, "stroke-width":2, "stroke-linejoin":"round","stroke-linecap":"round"}));
+      // peak label: mark the single highest point if it's a real spike (>=40)
+      var maxV=-1,maxI=-1;
+      s.data.forEach(function(v,i){ if(v>maxV){maxV=v;maxI=i;} });
+      if(maxV>=40){
+        svg.appendChild(el("circle",{cx:x(maxI),cy:y(maxV),r:3.5,fill:s.color}));
+        var lbl = el("text",{x:x(maxI), y:y(maxV)-9,"text-anchor":"middle","font-size":10.5,"font-family":"IBM Plex Mono, monospace",fill:"var(--ink)","font-weight":600});
+        lbl.textContent = maxV; svg.appendChild(lbl);
+      }
+    });
+
+    // legend
+    seriesDefs.forEach(function(s){
+      var item = document.createElement("div"); item.className="legend-item";
+      var sw = document.createElement("span"); sw.className="legend-swatch"; sw.style.background=s.color;
+      var avg = Math.round(s.data.reduce(function(a,b){return a+b;},0)/s.data.length);
+      item.appendChild(sw);
+      item.appendChild(document.createTextNode(s.label+" · 평균 "+avg));
+      legendEl.appendChild(item);
+    });
+
+    // hover
+    var hitRect = el("rect",{x:padL,y:padT,width:plotW,height:plotH,fill:"transparent"});
+    var guide = el("line",{y1:padT,y2:H-padB,stroke:"var(--chart-axis)","stroke-width":1,"stroke-dasharray":"3,3",opacity:0});
+    svg.appendChild(guide);
+    svg.appendChild(hitRect);
+
+    function onMove(evt){
+      var rect = svg.getBoundingClientRect();
+      var mx = (evt.clientX - rect.left) * (W/rect.width);
+      var i = Math.round((mx-padL)/(plotW/(n-1)));
+      if(i<0)i=0; if(i>n-1)i=n-1;
+      guide.setAttribute("x1",x(i)); guide.setAttribute("x2",x(i)); guide.setAttribute("opacity",1);
+      var lines = seriesDefs.map(function(s){return s.label+": "+s.data[i];}).join("<br>");
+      tip.innerHTML = "<b>"+fmtDate(dates[i])+"</b><br>"+lines;
+      tip.style.opacity = 1;
+      var wrapRect = svg.parentElement.getBoundingClientRect();
+      var px = (evt.clientX - wrapRect.left);
+      tip.style.left = Math.min(px+12, wrapRect.width-140)+"px";
+      tip.style.top = "6px";
+    }
+    hitRect.addEventListener("mousemove", onMove);
+    hitRect.addEventListener("mouseleave", function(){ tip.style.opacity=0; guide.setAttribute("opacity",0); });
+  }
+
+  renderChart("chart1","tip1","legend1",[
+    {label:"K-campus", color:"var(--s1)", data:kcEN},
+    {label:"케이캠퍼스", color:"var(--s2)", data:kcKR}
+  ]);
+
+  renderChart("chart2","tip2","legend2",[
+    {label:"K-campus", color:"var(--s1)", data:kc2},
+    {label:"Hi-Korea", color:"var(--s2)", data:hikorea},
+    {label:"Kowork", color:"var(--s3)", data:kowork},
+    {label:"Buddies Korea", color:"var(--s4)", data:buddies},
+    {label:"studyinkorea", color:"var(--s5)", data:studyinkorea}
+  ]);
+})();
+</script>
